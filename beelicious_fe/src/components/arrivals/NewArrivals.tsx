@@ -1,32 +1,32 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import { Fade } from "react-awesome-reveal";
-import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
-import useSWR from "swr";
-import { Row } from "react-bootstrap";
-import fetcher from "../fetcher/Fetcher";
-import ProductItemCard from "../item/ProductItemCard";
+import React, { useState } from 'react';
+import { Fade } from 'react-awesome-reveal';
+import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
+import useSWR from 'swr';
+import { Row } from 'react-bootstrap';
+import fetcher from '../fetcher/Fetcher';
+import ProductItemCard from '../item/ProductItemCard';
 
 const NewArrivals = ({ onSuccess = () => {}, onError = () => {} }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   const Categories = [
     {
-      groupname: "Banana",
-      categoryName: ["Banana", "Epicurious", "Buttermilk", "Walnut"],
+      groupname: 'Banana',
+      categoryName: ['Banana', 'Epicurious', 'Buttermilk', 'Walnut'],
     },
     {
-      groupname: "Chocolaty",
-      categoryName: ["chocolate ", "Chocolaty Biscuit", "Chocolaty"],
+      groupname: 'Chocolaty',
+      categoryName: ['chocolate ', 'Chocolaty Biscuit', 'Chocolaty'],
     },
     {
-      groupname: "Nut",
-      categoryName: ["Nut", "Coconut", "Cashew"],
+      groupname: 'Nut',
+      categoryName: ['Nut', 'Coconut', 'Cashew'],
     },
   ];
 
-  const { data, error } = useSWR("/api/all-product", fetcher, {
+  const { data, error } = useSWR('/api/all-product', fetcher, {
     onSuccess,
     onError,
   });
@@ -47,13 +47,13 @@ const NewArrivals = ({ onSuccess = () => {}, onError = () => {} }) => {
       Categories.find(
         (cat) =>
           cat.groupname === category &&
-          cat.categoryName.includes(product.category),
-      ),
+          cat.categoryName.includes(product.category)
+      )
     );
   };
 
   return (
-    <section className="section-product-tabs padding-tb-50" style={{zIndex:'10'}}>
+    <section className="section-product-tabs padding-tb-50">
       <div className="container">
         <Tabs>
           {/* ================= TITLE & TABS ================= */}
@@ -63,7 +63,8 @@ const NewArrivals = ({ onSuccess = () => {}, onError = () => {} }) => {
                 <div className="section-title bb-deal">
                   <div className="section-detail">
                     <h2 className="bb-title">
-                      <span style={{color:'#FFE8B3'}}>Explore</span> Our Bread Selection
+                      <span style={{ color: '#FFE8B3' }}>Explore</span> Our
+                      Bread Selection
                     </h2>
                     <p>
                       Freshly baked bread made with care, softness and rich
@@ -74,24 +75,22 @@ const NewArrivals = ({ onSuccess = () => {}, onError = () => {} }) => {
 
                   <TabList className="bb-pro-tab mb-3">
                     <ul className="bb-pro-tab-nav nav">
-                      {["All", "Banana", "Chocolaty", "Nut"].map(
-                        (tab, idx) => (
-                          <Tab
-                            key={tab}
-                            className="nav-item"
-                            style={{ outline: "none" }}
+                      {['All', 'Banana', 'Chocolaty', 'Nut'].map((tab, idx) => (
+                        <Tab
+                          key={tab}
+                          className="nav-item"
+                          style={{ outline: 'none' }}
+                        >
+                          <a
+                            className={`nav-link ${
+                              selectedIndex === idx ? 'active' : ''
+                            }`}
+                            onClick={() => setSelectedIndex(idx)}
                           >
-                            <a
-                              className={`nav-link ${
-                                selectedIndex === idx ? "active" : ""
-                              }`}
-                              onClick={() => setSelectedIndex(idx)}
-                            >
-                              {tab}
-                            </a>
-                          </Tab>
-                        ),
-                      )}
+                            {tab}
+                          </a>
+                        </Tab>
+                      ))}
                     </ul>
                   </TabList>
                 </div>
@@ -106,7 +105,7 @@ const NewArrivals = ({ onSuccess = () => {}, onError = () => {} }) => {
                 {/* -------- ALL PRODUCTS -------- */}
                 <TabPanel
                   className={`tab-pane fade ${
-                    selectedIndex === 0 ? "show active" : ""
+                    selectedIndex === 0 ? 'show active' : ''
                   }`}
                 >
                   <Row className="gx-4 gy-4">
@@ -129,7 +128,7 @@ const NewArrivals = ({ onSuccess = () => {}, onError = () => {} }) => {
                   <TabPanel
                     key={category.groupname}
                     className={`tab-pane fade ${
-                      selectedIndex === idx + 1 ? "show active" : ""
+                      selectedIndex === idx + 1 ? 'show active' : ''
                     }`}
                   >
                     <Row className="gx-4 gy-4">
@@ -144,7 +143,7 @@ const NewArrivals = ({ onSuccess = () => {}, onError = () => {} }) => {
                           >
                             <ProductItemCard data={product} />
                           </Fade>
-                        ),
+                        )
                       )}
                     </Row>
                   </TabPanel>

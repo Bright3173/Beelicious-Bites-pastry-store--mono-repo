@@ -10,14 +10,15 @@ import { Formik, FormikHelpers, FormikProps } from 'formik';
 import * as yup from 'yup';
 import { Col, Form, InputGroup, Row } from 'react-bootstrap';
 import Link from 'next/link';
-import api from '@/lib/api';
+import { api } from '@/lib/api';
+import { RegisterResponse } from '@/lib/api';
 
 interface FormValues {
   username: string;
   email: string;
   phoneNumber: string;
   password: string;
-  confirmPassword: string;
+  confirmPassword?: string;
 }
 
 const Register = () => {
@@ -27,11 +28,11 @@ const Register = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      router.push('/');
-    }
-  }, [isAuthenticated, router]);
+  // useEffect(() => {
+  //   if (isAuthenticated) {
+  //     router.push('/');
+  //   }
+  // }, [isAuthenticated, router]);
 
   const schema = yup.object().shape({
     username: yup
@@ -65,21 +66,24 @@ const Register = () => {
     formikHelpers: FormikHelpers<FormValues>
   ) => {
     try {
-      const res = await api.post('/users/register', {
+      const res = await api.register({
         username: values.username,
         email: values.email,
         phoneNumber: values.phoneNumber,
         password: values.password,
+        confirmPassword: values.confirmPassword,
       });
 
-      const userData = {
-        id: res.data.id,
-        email: res.data.email,
-        phoneNumber: res.data.phoneNumber,
-        username: res.data.username,
+      const userData: RegisterResponse = {
+        id: res.id,
+        email: res.email,
+        phoneNumber: res.phoneNumber,
+        username: res.username,
+        role: res.role,
+        accessToken: res.accessToken,
       };
 
-      localStorage.setItem('accessToken', res.data.accessToken);
+      localStorage.setItem('accessToken', res.accessToken);
       localStorage.setItem('user', JSON.stringify(userData));
 
       dispatch(login(userData));
@@ -179,7 +183,7 @@ const Register = () => {
                         </Form.Group>
                       </div>
                       <div className="bb-login-wrap">
-                        <label htmlFor="username">Phone Number*</label>
+                        <label htmlFor="phone-number">Phone Number*</label>
                         <Form.Group>
                           <InputGroup>
                             <Form.Control
@@ -219,7 +223,9 @@ const Register = () => {
                         </Form.Group>
                       </div>
                       <div className="bb-login-wrap">
-                        <label htmlFor="email">Confirm Password*</label>
+                        <label htmlFor="confirm-password">
+                          Confirm Password*
+                        </label>
                         <Form.Group>
                           <InputGroup>
                             <Form.Control

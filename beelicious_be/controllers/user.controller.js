@@ -97,6 +97,22 @@ const logoutUser = async (req, res) => {
   res.json({ message: 'Logged out successfully' });
 };
 
+// Get User by ID
+const getUserById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findById(id).select(
+      '-password -refreshToken -resetPasswordOTP -resetPasswordExpire -otpAttempts',
+    );
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 // Update User
 
 const updateUser = async (req, res) => {
@@ -272,4 +288,5 @@ module.exports = {
   forgotPassword,
   resetPassword,
   updateUser,
+  getUserById,
 };

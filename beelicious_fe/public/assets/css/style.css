@@ -4129,6 +4129,8 @@ button.btn-close.qty_close {
   justify-content: center;
 }
 
+
+
 .active-variant {
   position: relative;
 }
@@ -4203,6 +4205,13 @@ button.btn-close.qty_close {
   background: linear-gradient(180deg, #fff 0%, #3a3a3a 50%, #777777);
   box-shadow: 0px -20px 40px rgba(0, 0, 0, 0.6) inset;
   overflow: hidden;
+}
+
+.table-dashboard th,
+.table-dashboard td {
+  padding: 12px 15px;
+  font-size: 14px;
+  color: #fff;
 }
 
 .section-hero:after {
@@ -4425,6 +4434,8 @@ button.btn-close.qty_close {
   -webkit-filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.015));
   filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.015));
 }
+
+
 
 /* Responsive footer css */
 @media only screen and (max-width: 1440px) {

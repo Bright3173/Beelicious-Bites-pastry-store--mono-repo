@@ -10,7 +10,7 @@ import { Formik, FormikHelpers, FormikProps } from 'formik';
 import * as yup from 'yup';
 import { Col, Form, InputGroup, Row } from 'react-bootstrap';
 import Link from 'next/link';
-import api from '@/lib/api';
+import { api, LoginResponse } from '@/lib/api';
 
 interface FormValues {
   email: string;
@@ -22,11 +22,11 @@ const Login = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  useEffect(() => {
-    if (user) {
-      router.push('/');
-    }
-  }, [user, router]);
+  // useEffect(() => {
+  //   if (user) {
+  //     router.push('/');
+  //   }
+  // }, [user, router]);
 
   const schema = yup.object().shape({
     email: yup.string().email('Invalid email').required('Email is required'),
@@ -46,21 +46,23 @@ const Login = () => {
     formikHelpers: FormikHelpers<FormValues>
   ) => {
     try {
-      const res = await api.post('/users/login', {
+      const res = await api.login({
         email: values.email,
         password: values.password,
       });
 
-      const userData = {
-        id: res.data.id,
-        email: res.data.email,
-        username: res.data.username,
+      console.log('Login response:', res);
+      const userData: LoginResponse = {
+        id: res.id,
+        email: res.email,
+        username: res.username,
+        role: res.role,
+        accessToken: res.accessToken,
       };
 
-      localStorage.setItem('accessToken', res.data.accessToken);
+      localStorage.setItem('accessToken', res.accessToken || '');
       localStorage.setItem('user', JSON.stringify(userData));
 
-      console.log(userData);
       dispatch(login(userData));
       router.push('/');
       showSuccessToast('User login successfull!');

@@ -1,33 +1,40 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/navigation';
 import { RootState } from '@/store';
 
-type User = {
-  id: string;
-  email?: string;
-  name?: string;
-  phoneNumber?: string;
+const AdminGuard = ({ children }: { children: React.ReactNode }) => {
+  const user = useSelector((state: RootState) => state.login.user);
+  const router = useRouter();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem('user');
+
+    let currentUser = user;
+
+    if (!currentUser && storedUser) {
+      currentUser = JSON.parse(storedUser);
+    }
+
+    if (!currentUser) {
+      router.replace('/');
+      return;
+    }
+
+    if (currentUser.role !== 'admin') {
+      router.replace('/');
+      return;
+    }
+
+    setLoading(false);
+  }, [user, router]);
+
+  if (loading) return null;
+
+  return <>{children}</>;
 };
 
-const authGuard = <P extends object>(
-  WrappedComponent: React.ComponentType<P>
-) => {
-  return function GuardedComponent(props: P) {
-    const user: User | null = useSelector(
-      (state: RootState) => state.login?.user
-    );
-    const router = useRouter();
-    useEffect(() => {
-      if (!user) {
-        router.push('/');
-      }
-    }, [user, router]);
-    if (!user) return null;
-    return <WrappedComponent {...props} />;
-  };
-};
-
-export default authGuard;
+export default AdminGuard;
