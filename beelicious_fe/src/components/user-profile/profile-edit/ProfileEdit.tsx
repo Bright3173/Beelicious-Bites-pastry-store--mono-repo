@@ -1,24 +1,12 @@
-import {
-  getRegistrationData,
-  setRegistrationData,
-} from '@/components/login/Register';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { Fade } from 'react-awesome-reveal';
 import { Col, Form, Row } from 'react-bootstrap';
 import { Formik, FormikHelpers, FormikProps } from 'formik';
 import * as yup from 'yup';
-
-// export interface RegistrationData {
-//     firstName: string;
-//     lastName: string;
-//     email: string;
-//     phoneNumber: string;
-//     address: string;
-//     profilePhoto?: string;
-//     description: string;
-//     shippingAddress: string;
-// }
+import axios from 'axios';
+import api from '@/lib/api';
+import { showSuccessToast } from '@/components/toast-popup/Toastify';
 
 interface FormValues {
   uid: string;
@@ -29,7 +17,6 @@ interface FormValues {
   address: string;
   profilePhoto?: string;
   description: string;
-  shippingAddress: string;
 }
 
 const ProfileEdit = () => {
@@ -47,7 +34,6 @@ const ProfileEdit = () => {
     address: yup.string().required(),
     profilePhoto: yup.mixed().notRequired(),
     description: yup.string().required(),
-    shippingAddress: yup.string().required(),
   });
 
   // const [validated, setValidated] = useState(false);
@@ -58,7 +44,6 @@ const ProfileEdit = () => {
     email: '',
     phoneNumber: '',
     address: '',
-    shippingAddress: '',
     profilePhoto: '',
     description: '',
   });
@@ -75,7 +60,6 @@ const ProfileEdit = () => {
         email: loginUser?.email ?? '',
         phoneNumber: loginUser?.phoneNumber ?? '',
         address: loginUser?.address ?? '',
-        shippingAddress: loginUser?.shippingAddress ?? '',
         profilePhoto: loginUser?.profilePhoto ?? '',
         description: loginUser?.description ?? '',
       });
@@ -96,22 +80,25 @@ const ProfileEdit = () => {
     }
   };
 
-  const onSubmit = (
+  const onSubmit = async (
     values: FormValues,
     formikHelpers: FormikHelpers<FormValues>
   ) => {
     formikHelpers.setSubmitting(false);
+
     const loginUserString = localStorage.getItem('login_user');
-    const loginUser = loginUserString ? JSON.parse(loginUserString) : {};
-    if (loginUser) {
-      const updatedData = [...getRegistrationData()];
-      const index = updatedData.findIndex(
-        (user: any) => user.uid === loginUser.uid
-      );
-      updatedData[index] = { ...values };
-      setRegistrationData(updatedData);
-      localStorage.setItem('login_user', JSON.stringify(values));
-    }
+    const loginUser = loginUserString ? JSON.parse(loginUserString) : null;
+
+    const token = localStorage.getItem('token');
+    const response = await api.put(`/users/${loginUser?.id}`, values, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    console.log('Response:', response);
+    localStorage.setItem('login_user', JSON.stringify(response?.data?.user));
+    showSuccessToast('User profile updated successfully!');
+
     router.push('/user-profile');
   };
 
@@ -242,23 +229,7 @@ const ProfileEdit = () => {
                                 </Form.Control.Feedback>
                               </Form.Group>
                             </div>
-                            <div className="bb-register-wrap bb-register-width-50">
-                              <label>Shipping Address*</label>
-                              <Form.Group>
-                                <Form.Control
-                                  onChange={handleChange}
-                                  value={values.shippingAddress}
-                                  type="text"
-                                  name="shippingAddress"
-                                  placeholder="Shipping Address"
-                                  required
-                                  isInvalid={!!errors.shippingAddress}
-                                />
-                                <Form.Control.Feedback type="invalid">
-                                  {errors.shippingAddress}
-                                </Form.Control.Feedback>
-                              </Form.Group>
-                            </div>
+
                             <div className="bb-register-wrap bb-register-width-100">
                               <label>About Me*</label>
                               <Form.Group>

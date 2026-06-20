@@ -1,7 +1,16 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const UserSchema = new mongoose.Schema(
   {
+    firstName: {
+      type: String,
+    },
+    lastName: {
+      type: String,
+    },
+    address: {
+      type: String,
+    },
     username: {
       type: String,
       required: true,
@@ -24,6 +33,13 @@ const UserSchema = new mongoose.Schema(
     resetPasswordExpire: {
       type: Date,
     },
+    image: {
+      type: String,
+      required: false,
+    },
+    description: {
+      type: String,
+    },
 
     otpAttempts: {
       type: Number,
@@ -31,12 +47,12 @@ const UserSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ["user", "admin"],
-      default: "user",
+      enum: ['user', 'admin'],
+      default: 'user',
     },
   },
   { timestamps: true },
 );
 
-const User = mongoose.model("User", UserSchema);
+const User = mongoose.model('User', UserSchema);
 module.exports = User;

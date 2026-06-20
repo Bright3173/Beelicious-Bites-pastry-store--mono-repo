@@ -78,12 +78,10 @@ const Register = () => {
         phoneNumber: res.data.phoneNumber,
         username: res.data.username,
       };
-      console.log(userData);
 
       localStorage.setItem('accessToken', res.data.accessToken);
       localStorage.setItem('user', JSON.stringify(userData));
 
-      console.log(userData);
       dispatch(login(userData));
       router.push('/');
       showSuccessToast('User registered successfull!');

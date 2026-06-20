@@ -8,7 +8,7 @@
     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "format": "prettier --write .",
     "build:netlify": "next build",
-    "build": "cross-env NODE_OPTIONS='--max-old-space-size=512' next build",
+    "build": "next build",
     "start": "next start -H 0.0.0.0 -p 3005"
   },
   "lint-staged": {

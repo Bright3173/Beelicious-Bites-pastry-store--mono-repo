@@ -1,23 +1,19 @@
-version: "3.9"
 
 services:
   backend:
-    build: ./beelcious_be
+    build: ./beelicious_be
     container_name: backend
     restart: always
     env_file:
-      - ./beelcious_be/.env
+      - ./beelicious_be/.env
     ports:
       - "5000:5000"
 
   frontend:
-    build: 
-     context: ./beelicious_fe
-     args: 
-      NEXT_PUBLIC_API_URL: http://13.60.228.234:5000/api
+    build: ./beelicious_fe
     container_name: frontend
     restart: always
     ports:
-      - "3005:3005" #I changed the port to 3005 because 3000 is already in use by another application on my machine
+      - "3005:3005" 
     depends_on:
       - backend
