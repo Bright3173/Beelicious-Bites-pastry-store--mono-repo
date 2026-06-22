@@ -1,6 +1,6 @@
 'use client';
 
-import api from '@/lib/api';
+import { api } from '@/lib/api';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { Button, Spinner, Table, Image } from 'react-bootstrap';
@@ -23,7 +23,7 @@ export default function ProductTable() {
 
   const fetchProducts = async () => {
     try {
-      const res = await api.get('/products');
+      const res = await api.getProduct();
       setProducts(res.data);
     } catch (error) {
       showErrorToast('Failed to fetch products');
@@ -46,7 +46,7 @@ export default function ProductTable() {
 
       const token = localStorage.getItem('accessToken');
 
-      await api.delete(`/products/${id}`, {
+      await api.deleteProduct(`/products/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

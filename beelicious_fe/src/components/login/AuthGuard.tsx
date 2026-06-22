@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { RootState } from '@/store';
 
 const AdminGuard = ({ children }: { children: React.ReactNode }) => {
-  const user = useSelector((state: RootState) => state.login.user);
+  const user = useSelector((state: RootState) => state.login?.user);
   const router = useRouter();
   const [loading, setLoading] = useState(true);
 

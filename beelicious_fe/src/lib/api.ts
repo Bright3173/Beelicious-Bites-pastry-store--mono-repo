@@ -154,11 +154,26 @@ class Api {
     });
   }
 
-  async resetPassword(token: string, newPassword: string) {
+  async resetPassword(email: string, token: string, newPassword: string) {
     return this.request({
       url: '/auth/reset-password',
       method: 'POST',
-      data: { token, newPassword },
+      data: { email, token, newPassword },
+    });
+  }
+
+  async getProduct(): Promise<any> {
+    return this.request({
+      url: '/products/',
+      method: 'GET',
+    });
+  }
+
+  async deleteProduct(url: string, config?: AxiosRequestConfig) {
+    return this.request({
+      url,
+      method: 'DELETE',
+      ...config,
     });
   }
 
@@ -166,14 +181,6 @@ class Api {
     return this.request({
       url: '/auth/refresh-token',
       method: 'POST',
-    });
-  }
-
-  async verifyEmail(token: string) {
-    return this.request({
-      url: '/auth/verify-email',
-      method: 'POST',
-      data: { token },
     });
   }
 
@@ -187,25 +194,3 @@ class Api {
 }
 
 export const api = new Api();
-
-// async updateUserRole(userId: string, role: string) {
-//   return this.request(`/api/users/${userId}/role`, {
-//     method: 'PATCH',
-//     body: JSON.stringify({ role }),
-//   });
-// }
-
-// const api = axios.create({
-//   baseURL: 'http://localhost:5000/api',
-//   withCredentials: true,
-// });
-
-// api.interceptors.request.use((config) => {
-//   const token = localStorage.getItem('accessToken');
-
-//   if (token) {
-//     config.headers.Authorization = `Bearer ${token}`;
-//   }
-
-//   return config;
-// });

@@ -5,7 +5,7 @@ import { Form, InputGroup, Button, Container, Row, Col } from 'react-bootstrap';
 import { EyeIcon, EyeSlashIcon } from '@phosphor-icons/react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
-import api from '@/lib/api';
+import { api } from '@/lib/api';
 
 const ForgotPasswordPage = () => {
   const router = useRouter();
@@ -72,17 +72,13 @@ const ForgotPasswordPage = () => {
 
     try {
       if (stage === 1) {
-        await api.post('/users/forgot-password', { email });
+        await api.forgotPassword(email);
 
         toast.success('OTP sent to your email');
         setStage(2);
         setResendCooldown(60);
       } else {
-        await api.post('/users/reset-password', {
-          email,
-          otp: token,
-          password: newPassword,
-        });
+        await api.resetPassword(email, token, newPassword);
 
         toast.success('Password changed successfully');
         router.push('/login');
@@ -194,7 +190,7 @@ const ForgotPasswordPage = () => {
                         className="mt-1"
                         onClick={async () => {
                           try {
-                            await api.post('/users/forgot-password', { email });
+                            await api.forgotPassword(email);
 
                             toast.success('Token resent');
                             setResendCooldown(60);

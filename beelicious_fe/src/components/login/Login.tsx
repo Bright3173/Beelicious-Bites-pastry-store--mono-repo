@@ -22,12 +22,6 @@ const Login = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  // useEffect(() => {
-  //   if (user) {
-  //     router.push('/');
-  //   }
-  // }, [user, router]);
-
   const schema = yup.object().shape({
     email: yup.string().email('Invalid email').required('Email is required'),
     password: yup
@@ -51,7 +45,6 @@ const Login = () => {
         password: values.password,
       });
 
-      console.log('Login response:', res);
       const userData: LoginResponse = {
         id: res.id,
         email: res.email,
